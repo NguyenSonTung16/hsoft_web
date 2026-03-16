@@ -142,6 +142,9 @@ export function useLoginForm() {
           reauthRequired: result.session?.reauthRequired ?? false,
           sessionToken: result.session?.sessionToken,
           expiresAt: result.session?.expiresAt,
+          facilityId: result.session?.facilityId,
+          labAreaId: result.session?.labAreaId,
+          workDate: result.session?.workDate,
           lastAttemptAt: new Date().toISOString(),
         })
         logEvent('submit_success', { username: form.username, facilityId: form.facilityId })
@@ -173,6 +176,15 @@ export function useLoginForm() {
     }
   }, [form, session.status, touchAll, isFormValid])
 
+  const resetSessionForRelogin = useCallback((reason: string) => {
+    setSession({
+      status: 'error',
+      message: reason,
+      reauthRequired: true,
+      lastAttemptAt: new Date().toISOString(),
+    })
+  }, [])
+
   return {
     form,
     session,
@@ -181,5 +193,6 @@ export function useLoginForm() {
     loadingLookups,
     setField,
     handleSubmit,
+    resetSessionForRelogin,
   }
 }

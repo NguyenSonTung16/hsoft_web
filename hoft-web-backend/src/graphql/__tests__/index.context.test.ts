@@ -28,6 +28,10 @@ test("context builder resolves context from data-access adapter", async () => {
           facilityScope: { facilityId: "f1", labAreaId: "l1" },
         };
       },
+      resolveMainScreenContext: async () => ({
+        roleCodes: [],
+        isContextValid: false,
+      }),
     },
     securityLogger: {
       warn: () => undefined,
@@ -54,6 +58,10 @@ test("context builder ignores client role header and logs warning", async () => 
   const contextBuilder = createGraphQLContextBuilder({
     authContextDataAccess: {
       resolveServerAuthContext: async () => ({ roleCodes: [] }),
+      resolveMainScreenContext: async () => ({
+        roleCodes: [],
+        isContextValid: false,
+      }),
     },
     securityLogger: {
       warn: (event) => {
@@ -81,6 +89,10 @@ test("context builder returns login_entry role when bearer token is missing", as
   const contextBuilder = createGraphQLContextBuilder({
     authContextDataAccess: {
       resolveServerAuthContext: async () => ({ roleCodes: [] }),
+      resolveMainScreenContext: async () => ({
+        roleCodes: [],
+        isContextValid: false,
+      }),
     },
     securityLogger: {
       warn: () => undefined,
@@ -101,6 +113,10 @@ test("context builder returns login_entry role when token is invalid", async () 
   const contextBuilder = createGraphQLContextBuilder({
     authContextDataAccess: {
       resolveServerAuthContext: async () => ({ roleCodes: [] }),
+      resolveMainScreenContext: async () => ({
+        roleCodes: [],
+        isContextValid: false,
+      }),
     },
     securityLogger: {
       warn: () => undefined,
@@ -127,6 +143,10 @@ test("context builder returns login_entry role when adapter throws", async () =>
       resolveServerAuthContext: async () => {
         throw new Error("DB down");
       },
+      resolveMainScreenContext: async () => ({
+        roleCodes: [],
+        isContextValid: false,
+      }),
     },
     securityLogger: {
       warn: () => undefined,

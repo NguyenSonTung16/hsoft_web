@@ -38,6 +38,9 @@ export interface SessionBootstrapState {
   message?: string
   sessionToken?: string
   expiresAt?: string
+  facilityId?: string
+  labAreaId?: string
+  workDate?: string
   reauthRequired: boolean
   lastAttemptAt?: string
 }
