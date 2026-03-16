@@ -129,7 +129,6 @@
   background: var(--color-primary, #1a5fa8);
   border: none;
   border-radius: 6px;
-  cursor: pointer;
   margin-top: 0.5rem;
   transition: background 0.15s, opacity 0.15s;
 }

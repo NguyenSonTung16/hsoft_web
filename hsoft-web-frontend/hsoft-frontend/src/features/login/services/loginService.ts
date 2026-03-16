@@ -5,6 +5,9 @@ export interface LoginResponseContract {
   session?: {
     sessionToken?: string
     expiresAt?: string
+    facilityId?: string
+    labAreaId?: string
+    workDate?: string
     reauthRequired: boolean
   }
   errors: Array<{ code: string; message: string }>
@@ -120,6 +123,9 @@ class LoginGraphQLService implements LoginServiceContract {
           session: {
             sessionToken?: string
             expiresAt?: string
+            facilityId?: string
+            labAreaId?: string
+            workDate?: string
             reauthRequired: boolean
           } | null
         }
@@ -132,6 +138,9 @@ class LoginGraphQLService implements LoginServiceContract {
               session {
                 sessionToken
                 expiresAt
+                facilityId
+                labAreaId
+                workDate
                 reauthRequired
               }
             }
