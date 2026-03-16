@@ -12,3 +12,7 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+.github/
+.specify/
+.spec/
