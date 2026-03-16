@@ -2,3 +2,13 @@ node_modules
 dist
 .env
 npm-debug.log
+build
+*.log
+.env*
+coverage
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/

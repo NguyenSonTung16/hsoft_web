@@ -1,0 +1,159 @@
+/* ── Login Card Container ─────────────────────────────────── */
+.lis-login-card {
+  background: var(--color-surface, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.lis-login-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.lis-login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary, #1a5fa8);
+  margin: 0 0 0.35rem;
+}
+
+.lis-login-subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #6b7280);
+  margin: 0;
+}
+
+/* ── Status Banners ───────────────────────────────────────── */
+.lis-status-banner {
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.lis-status-success {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.lis-status-error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* ── Form Layout ──────────────────────────────────────────── */
+.lis-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ── Field Group ──────────────────────────────────────────── */
+.lis-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.lis-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text, #111827);
+}
+
+.lis-required {
+  color: var(--error-color, #dc2626);
+  margin-left: 2px;
+}
+
+/* ── Inputs & Selects ─────────────────────────────────────── */
+.lis-input,
+.lis-select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--input-border, #d1d5db);
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.938rem;
+  color: var(--color-text, #111827);
+  background: var(--color-bg, #ffffff);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.lis-input:focus,
+.lis-select:focus {
+  border-color: var(--color-primary, #1a5fa8);
+  box-shadow: 0 0 0 3px var(--focus-ring, rgba(26, 95, 168, 0.18));
+}
+
+.lis-input-error {
+  border-color: var(--error-color, #dc2626);
+}
+
+.lis-input-error:focus {
+  border-color: var(--error-color, #dc2626);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+.lis-input:disabled,
+.lis-select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+  opacity: var(--btn-disabled-opacity, 0.65);
+}
+
+/* ── Field Error ──────────────────────────────────────────── */
+.lis-field-error {
+  font-size: 0.8rem;
+  color: var(--error-color, #dc2626);
+}
+
+/* ── Submit Button ────────────────────────────────────────── */
+.lis-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--color-primary, #1a5fa8);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.lis-submit-btn:hover:not(:disabled) {
+  background: var(--color-primary-dark, #15488a);
+}
+
+.lis-submit-btn:disabled {
+  opacity: var(--btn-disabled-opacity, 0.55);
+  cursor: not-allowed;
+}
+
+/* ── Loading Spinner ──────────────────────────────────────── */
+.lis-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: lis-spin 0.7s linear infinite;
+}
+
+@keyframes lis-spin {
+  to { transform: rotate(360deg); }
+}
