@@ -1,9 +1,9 @@
 import { useState, useCallback, useEffect } from 'react'
 import type { LoginFormState, FacilityOption, LabAreaOption, SessionBootstrapState } from '../types/login.types'
-import { loginService } from '../services/loginService'
+import { loginService, type LoginServiceContract } from '../services/loginService'
 import { logEvent } from '../services/loginLogger'
 
-function validateLoginForm(form: LoginFormState): Record<string, string> {
+export function validateLoginForm(form: LoginFormState): Record<string, string> {
   const errors: Record<string, string> = {}
 
   if (!form.username.trim()) {
@@ -44,7 +44,17 @@ const initialSession: SessionBootstrapState = {
   reauthRequired: false,
 }
 
-export function useLoginForm() {
+interface UseLoginFormDeps {
+  service: Pick<LoginServiceContract, 'loadFacilities' | 'loadLabAreas' | 'submitLogin'>
+  log: typeof logEvent
+}
+
+const defaultDeps: UseLoginFormDeps = {
+  service: loginService,
+  log: logEvent,
+}
+
+function useLoginFormInternal(deps: UseLoginFormDeps) {
   const [form, setForm] = useState<LoginFormState>(initialForm)
   const [session, setSession] = useState<SessionBootstrapState>(initialSession)
   const [facilities, setFacilities] = useState<FacilityOption[]>([])
@@ -53,16 +63,16 @@ export function useLoginForm() {
 
   // Load facilities on mount
   useEffect(() => {
-    loginService.loadFacilities()
+    deps.service.loadFacilities()
       .then(result => {
         setFacilities(result)
-        logEvent('lookup_load', {})
+        deps.log('lookup_load', {})
       })
       .catch(() => {
-        logEvent('lookup_load', { errorCode: 'FACILITY_LOAD_FAILED' })
+        deps.log('lookup_load', { errorCode: 'FACILITY_LOAD_FAILED' })
       })
       .finally(() => setLoadingLookups(false))
-  }, [])
+  }, [deps])
 
   // Reload lab areas when facility changes
   useEffect(() => {
@@ -71,7 +81,7 @@ export function useLoginForm() {
       setLabAreas([])
       return
     }
-    loginService.loadLabAreas(form.facilityId)
+    deps.service.loadLabAreas(form.facilityId)
       .then(result => {
         setLabAreas(result)
         // Reset labAreaId if current selection no longer valid
@@ -81,9 +91,9 @@ export function useLoginForm() {
         }))
       })
       .catch(() => {
-        logEvent('lookup_load', { facilityId: form.facilityId, errorCode: 'AREA_LOAD_FAILED' })
+        deps.log('lookup_load', { facilityId: form.facilityId, errorCode: 'AREA_LOAD_FAILED' })
       })
-  }, [form.facilityId])
+  }, [deps, form.facilityId])
 
   const setField = useCallback(<K extends keyof LoginFormState>(
     field: K,
@@ -121,14 +131,14 @@ export function useLoginForm() {
     if (!isFormValid(form)) return
 
     setSession({ status: 'loading', reauthRequired: false })
-    logEvent('submit', {
+    deps.log('submit', {
       username: form.username,
       facilityId: form.facilityId,
       labAreaId: form.labAreaId,
     })
 
     try {
-      const result = await loginService.submitLogin({
+      const result = await deps.service.submitLogin({
         username: form.username,
         password: form.password,
         facilityId: form.facilityId,
@@ -147,7 +157,7 @@ export function useLoginForm() {
           workDate: result.session?.workDate,
           lastAttemptAt: new Date().toISOString(),
         })
-        logEvent('submit_success', { username: form.username, facilityId: form.facilityId })
+        deps.log('submit_success', { username: form.username, facilityId: form.facilityId })
       } else {
         const msg = result.errors[0]?.message ?? 'Đăng nhập thất bại. Vui lòng thử lại.'
         setSession({
@@ -156,7 +166,7 @@ export function useLoginForm() {
           reauthRequired: false,
           lastAttemptAt: new Date().toISOString(),
         })
-        logEvent('submit_error', {
+        deps.log('submit_error', {
           username: form.username,
           facilityId: form.facilityId,
           errorCode: result.errors[0]?.code,
@@ -169,12 +179,12 @@ export function useLoginForm() {
         reauthRequired: false,
         lastAttemptAt: new Date().toISOString(),
       })
-      logEvent('submit_error', {
+      deps.log('submit_error', {
         username: form.username,
         errorCode: 'NETWORK_ERROR',
       })
     }
-  }, [form, session.status, touchAll, isFormValid])
+  }, [deps, form, session.status, touchAll, isFormValid])
 
   const resetSessionForRelogin = useCallback((reason: string) => {
     setSession({
@@ -195,4 +205,8 @@ export function useLoginForm() {
     handleSubmit,
     resetSessionForRelogin,
   }
+}
+
+export function useLoginForm() {
+  return useLoginFormInternal(defaultDeps)
 }

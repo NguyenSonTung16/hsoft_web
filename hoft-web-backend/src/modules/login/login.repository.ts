@@ -24,12 +24,47 @@ export interface SessionDbRow {
   EXPIRES_AT: Date | string;
 }
 
-export class LoginRepository {
-  async loadFacilities(): Promise<FacilityRow[]> {
+export interface LoginRepositoryPort {
+  loadFacilities(): Promise<FacilityRow[]>;
+  loadLabAreas(facilityId: string): Promise<FacilityRow[]>;
+  findUserByUsername(username: string): Promise<UserAccountDbRow | null>;
+  incrementFailedAttempts(userId: string): Promise<void>;
+  hasScopeAccess(userId: string, facilityId: string, labAreaId: string): Promise<boolean>;
+  logSubmitError(
+    username: string,
+    facilityId: string,
+    labAreaId: string,
+    errorCode: string
+  ): Promise<void>;
+  submitLoginTransactionViaProcedure(input: {
+    sessionToken: string;
+    userId: string;
+    facilityId: string;
+    labAreaId: string;
+    workDate: string;
+    username: string;
+    issuedAt: Date;
+    expiresAt: Date;
+  }): Promise<string>;
+  refreshSession(sessionToken: string): Promise<SessionDbRow | null>;
+}
+
+export class LoginRepository implements LoginRepositoryPort {
+  private async withConnection<T>(
+    operation: (connection: oracledb.Connection) => Promise<T>
+  ): Promise<T> {
     let connection: oracledb.Connection | undefined;
 
     try {
       connection = await getConnection();
+      return await operation(connection);
+    } finally {
+      await connection?.close();
+    }
+  }
+
+  async loadFacilities(): Promise<FacilityRow[]> {
+    return this.withConnection(async (connection) => {
       const result = await connection.execute<FacilityRow>(
         `
           SELECT ID, CODE, NAME
@@ -42,16 +77,11 @@ export class LoginRepository {
       );
 
       return (result.rows as FacilityRow[] | undefined) ?? [];
-    } finally {
-      await connection?.close();
-    }
+    });
   }
 
   async loadLabAreas(facilityId: string): Promise<FacilityRow[]> {
-    let connection: oracledb.Connection | undefined;
-
-    try {
-      connection = await getConnection();
+    return this.withConnection(async (connection) => {
       const result = await connection.execute<FacilityRow>(
         `
           SELECT ID, CODE, NAME
@@ -65,16 +95,11 @@ export class LoginRepository {
       );
 
       return (result.rows as FacilityRow[] | undefined) ?? [];
-    } finally {
-      await connection?.close();
-    }
+    });
   }
 
   async findUserByUsername(username: string): Promise<UserAccountDbRow | null> {
-    let connection: oracledb.Connection | undefined;
-
-    try {
-      connection = await getConnection();
+    return this.withConnection(async (connection) => {
       const result = await connection.execute<UserAccountDbRow>(
         `
           SELECT ID, PASSWORD_HASH, IS_ACTIVE, NVL(FAILED_ATTEMPTS, 0) AS FAILED_ATTEMPTS
@@ -86,16 +111,11 @@ export class LoginRepository {
       );
 
       return ((result.rows as UserAccountDbRow[] | undefined)?.[0] ?? null);
-    } finally {
-      await connection?.close();
-    }
+    });
   }
 
   async incrementFailedAttempts(userId: string): Promise<void> {
-    let connection: oracledb.Connection | undefined;
-
-    try {
-      connection = await getConnection();
+    await this.withConnection(async (connection) => {
       await connection.execute(
         `
           UPDATE LIS_USER_ACCOUNT
@@ -110,9 +130,7 @@ export class LoginRepository {
         { userId },
         { autoCommit: true }
       );
-    } finally {
-      await connection?.close();
-    }
+    });
   }
 
   async hasScopeAccess(
@@ -120,10 +138,7 @@ export class LoginRepository {
     facilityId: string,
     labAreaId: string
   ): Promise<boolean> {
-    let connection: oracledb.Connection | undefined;
-
-    try {
-      connection = await getConnection();
+    return this.withConnection(async (connection) => {
       const result = await connection.execute<{ SCOPE_COUNT: number }>(
         `
           SELECT COUNT(*) AS SCOPE_COUNT
@@ -142,9 +157,7 @@ export class LoginRepository {
       });
 
       return Number(row.SCOPE_COUNT ?? 0) > 0;
-    } finally {
-      await connection?.close();
-    }
+    });
   }
 
   async logSubmitError(
@@ -153,10 +166,7 @@ export class LoginRepository {
     labAreaId: string,
     errorCode: string
   ): Promise<void> {
-    let connection: oracledb.Connection | undefined;
-
-    try {
-      connection = await getConnection();
+    await this.withConnection(async (connection) => {
       await connection.execute(
         `
           INSERT INTO LIS_LOGIN_ATTEMPT_LOG (
@@ -178,9 +188,7 @@ export class LoginRepository {
         { username, facilityId, labAreaId, errorCode },
         { autoCommit: true }
       );
-    } finally {
-      await connection?.close();
-    }
+    });
   }
 
   async submitLoginTransactionViaProcedure(input: {
@@ -193,10 +201,7 @@ export class LoginRepository {
     issuedAt: Date;
     expiresAt: Date;
   }): Promise<string> {
-    let connection: oracledb.Connection | undefined;
-
-    try {
-      connection = await getConnection();
+    return this.withConnection(async (connection) => {
       const result = await connection.execute(
         `
           BEGIN
@@ -233,16 +238,11 @@ export class LoginRepository {
 
       const outBinds = result.outBinds as { sessionId?: string } | undefined;
       return outBinds?.sessionId ?? "";
-    } finally {
-      await connection?.close();
-    }
+    });
   }
 
   async refreshSession(sessionToken: string): Promise<SessionDbRow | null> {
-    let connection: oracledb.Connection | undefined;
-
-    try {
-      connection = await getConnection();
+    return this.withConnection(async (connection) => {
 
       const updateResult = await connection.execute(
         `
@@ -277,8 +277,6 @@ export class LoginRepository {
       );
 
       return (refreshed.rows as SessionDbRow[] | undefined)?.[0] ?? null;
-    } finally {
-      await connection?.close();
-    }
+    });
   }
 }
