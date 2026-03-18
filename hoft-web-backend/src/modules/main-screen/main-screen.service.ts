@@ -40,6 +40,16 @@ interface ServiceDeps {
   authContextDataAccess: AuthContextDataAccess;
 }
 
+interface ValidMainScreenContext {
+  sessionToken: string;
+  userId: string;
+  roleCode: string;
+  facilityScope: {
+    facilityId: string;
+    labAreaId: string;
+  };
+}
+
 const defaultDeps: ServiceDeps = {
   repository: new MainScreenRepository(),
   authContextDataAccess: new OracleAuthContextAdapter(),
@@ -68,31 +78,53 @@ function comparePriority(a: WorkflowQueueItem, b: WorkflowQueueItem): number {
   return new Date(a.enteredStepAt).getTime() - new Date(b.enteredStepAt).getTime();
 }
 
+function normalizeRoles(roleCodes?: string[]): string[] {
+  return (roleCodes ?? []).map((role) => role.trim().toLowerCase());
+}
+
+function resolveRoleCodeOrThrow(normalizedRoles: string[]): string {
+  if (normalizedRoles.length !== 1) {
+    throw new GraphQLError("User role assignment is invalid", {
+      extensions: { code: "FORBIDDEN", reasonCode: "ROLE_INCONSISTENT" },
+    });
+  }
+
+  const roleCode = normalizedRoles[0];
+  if (!ROLE_MENU_PROFILE[roleCode]) {
+    throw new GraphQLError("Role is not supported for main screen", {
+      extensions: { code: "FORBIDDEN", reasonCode: "ROLE_NOT_ALLOWED" },
+    });
+  }
+
+  return roleCode;
+}
+
+async function resolveValidMainScreenContext(
+  deps: ServiceDeps,
+  sessionToken?: string
+): Promise<ValidMainScreenContext> {
+  const resolved = await deps.authContextDataAccess.resolveMainScreenContext(sessionToken);
+
+  if (!resolved.isContextValid || !resolved.userId || !resolved.facilityScope) {
+    throw new GraphQLError(resolved.invalidReason || "Invalid active context", {
+      extensions: { code: "UNAUTHENTICATED" },
+    });
+  }
+
+  const roleCode = resolveRoleCodeOrThrow(normalizeRoles(resolved.roleCodes));
+
+  return {
+    sessionToken: resolved.sessionToken || "",
+    userId: resolved.userId,
+    roleCode,
+    facilityScope: resolved.facilityScope,
+  };
+}
+
 export function createMainScreenService(deps: ServiceDeps = defaultDeps) {
   return {
     async getMainScreenPayload(sessionToken?: string): Promise<MainScreenPayload> {
-      const resolved = await deps.authContextDataAccess.resolveMainScreenContext(sessionToken);
-
-      if (!resolved.isContextValid || !resolved.userId || !resolved.facilityScope) {
-        throw new GraphQLError(resolved.invalidReason || "Invalid active context", {
-          extensions: { code: "UNAUTHENTICATED" },
-        });
-      }
-
-      const normalizedRoles = (resolved.roleCodes ?? []).map((role) => role.trim().toLowerCase());
-
-      if (normalizedRoles.length !== 1) {
-        throw new GraphQLError("User role assignment is invalid", {
-          extensions: { code: "FORBIDDEN", reasonCode: "ROLE_INCONSISTENT" },
-        });
-      }
-
-      const roleCode = normalizedRoles[0];
-      if (!ROLE_MENU_PROFILE[roleCode]) {
-        throw new GraphQLError("Role is not supported for main screen", {
-          extensions: { code: "FORBIDDEN", reasonCode: "ROLE_NOT_ALLOWED" },
-        });
-      }
+      const resolved = await resolveValidMainScreenContext(deps, sessionToken);
 
       const summaries = await deps.repository.getWorkflowStepSummaries({
         userId: resolved.userId,
@@ -104,7 +136,7 @@ export function createMainScreenService(deps: ServiceDeps = defaultDeps) {
         userId: resolved.userId,
         facilityId: resolved.facilityScope.facilityId,
         labAreaId: resolved.facilityScope.labAreaId,
-        roleCode,
+        roleCode: resolved.roleCode,
       });
 
       queue.sort(comparePriority);
@@ -113,7 +145,7 @@ export function createMainScreenService(deps: ServiceDeps = defaultDeps) {
         context: {
           sessionToken: resolved.sessionToken || "",
           userId: resolved.userId,
-          roleCode,
+          roleCode: resolved.roleCode,
           facilityId: resolved.facilityScope.facilityId,
           labAreaId: resolved.facilityScope.labAreaId,
           workDate: new Date().toISOString().slice(0, 10),
@@ -125,13 +157,7 @@ export function createMainScreenService(deps: ServiceDeps = defaultDeps) {
     },
 
     async getWorkflowTimeline(itemId: string, sessionToken?: string): Promise<WorkflowTimeline> {
-      const resolved = await deps.authContextDataAccess.resolveMainScreenContext(sessionToken);
-
-      if (!resolved.isContextValid || !resolved.userId) {
-        throw new GraphQLError(resolved.invalidReason || "Invalid active context", {
-          extensions: { code: "UNAUTHENTICATED" },
-        });
-      }
+      await resolveValidMainScreenContext(deps, sessionToken);
 
       return deps.repository.getWorkflowTimeline(itemId);
     },
@@ -150,7 +176,7 @@ export function createMainScreenService(deps: ServiceDeps = defaultDeps) {
         };
       }
 
-      const normalizedRoles = (resolved.roleCodes ?? []).map((role) => role.trim().toLowerCase());
+      const normalizedRoles = normalizeRoles(resolved.roleCodes);
       const roleCode = normalizedRoles[0] || "";
       const profile = ROLE_MENU_PROFILE[roleCode];
 

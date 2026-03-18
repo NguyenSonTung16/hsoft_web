@@ -11,16 +11,20 @@ import { entitySchema } from "../modules/entity/example.schema";
 import { entitResolver } from "../modules/entity/example.resolver";
 import { loginSchema } from "../modules/login/login.schema";
 import { loginResolver } from "../modules/login/login.resolver";
+import { mainScreenSchema } from "../modules/main-screen/main-screen.schema";
+import { mainScreenResolver } from "../modules/main-screen/main-screen.resolver";
 import { logger } from "../utils/logger";
 
 export const typeDefs = [
   entitySchema,
-  loginSchema
+  loginSchema,
+  mainScreenSchema,
 ];
 
 export const resolvers = [
   entitResolver,
-  loginResolver
+  loginResolver,
+  mainScreenResolver,
 ];
 
 interface ContextBuilderDeps {

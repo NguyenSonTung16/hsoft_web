@@ -78,7 +78,23 @@ async function requestGraphQL<TData>(
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP_${response.status}`);
+    let detail = "";
+
+    try {
+      const errorBody = (await response.json()) as {
+        errors?: GraphQLErrorItem[];
+      };
+
+      detail = errorBody.errors?.[0]?.message || "";
+    } catch {
+      try {
+        detail = await response.text();
+      } catch {
+        detail = "";
+      }
+    }
+
+    throw new Error(detail || `HTTP_${response.status}`);
   }
 
   const result = (await response.json()) as {
