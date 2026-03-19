@@ -195,6 +195,10 @@ function useLoginFormInternal(deps: UseLoginFormDeps) {
     })
   }, [])
 
+  const resetSessionForLogout = useCallback(() => {
+    setSession(initialSession)
+  }, [])
+
   return {
     form,
     session,
@@ -204,6 +208,7 @@ function useLoginFormInternal(deps: UseLoginFormDeps) {
     setField,
     handleSubmit,
     resetSessionForRelogin,
+    resetSessionForLogout,
   }
 }
 

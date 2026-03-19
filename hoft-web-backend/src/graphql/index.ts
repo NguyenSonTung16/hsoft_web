@@ -7,24 +7,35 @@ import {
   GraphQLAuthContext,
   OracleAuthContextAdapter,
 } from "../database/auth-context.adapter";
-import { entitySchema } from "../modules/entity/example.schema";
-import { entitResolver } from "../modules/entity/example.resolver";
 import { loginSchema } from "../modules/login/login.schema";
 import { loginResolver } from "../modules/login/login.resolver";
 import { mainScreenSchema } from "../modules/main-screen/main-screen.schema";
 import { mainScreenResolver } from "../modules/main-screen/main-screen.resolver";
 import { logger } from "../utils/logger";
+import { patientIntakeSchema } from "../modules/patient-intake/patient-intake.schema";
+import { patientIntakeResolver } from "../modules/patient-intake/patient-intake.resolver";
+
+const rootSchema = `#graphql
+  type Query {
+    _empty: String
+  }
+
+  type Mutation {
+    _empty: String
+  }
+`;
 
 export const typeDefs = [
-  entitySchema,
+  rootSchema,
   loginSchema,
   mainScreenSchema,
+  patientIntakeSchema,
 ];
 
 export const resolvers = [
-  entitResolver,
   loginResolver,
   mainScreenResolver,
+  patientIntakeResolver,
 ];
 
 interface ContextBuilderDeps {

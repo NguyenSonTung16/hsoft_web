@@ -2,23 +2,29 @@ interface RoleAwareMenuProps {
   roleCode: string;
 }
 
-const ROLE_MENU: Record<string, string[]> = {
-  reception_staff: ["Tiep nhan", "Chi dinh", "Queue"],
-  sample_collection_technician: ["Lay mau", "Nhan mau", "Queue"],
-  lab_technician: ["Phan tich", "Nhap ket qua", "Queue"],
-  lab_doctor: ["Duyet ket qua", "In ket qua", "Queue"],
-  system_admin: ["Quản trị", "Báo cáo", "Queue"],
-};
+const SIDEBAR_ITEMS = [
+  "Đăng ký bệnh nhân",
+  "Danh sách bệnh nhân",
+  "Tra cứu hồ sơ",
+  "Báo cáo tiếp nhận",
+];
+
+const DEFAULT_ACTIVE_ITEM = "Danh sách bệnh nhân";
 
 export function RoleAwareMenu({ roleCode }: RoleAwareMenuProps) {
-  const items = ROLE_MENU[roleCode] ?? ["Queue"];
-
   return (
-    <nav className="main-screen-panel menu-panel" aria-label="Role menu">
-      <h3>Menu theo quyền</h3>
+    <nav className="main-screen-panel menu-panel" aria-label="Side navbar">
+      <h3>Điều hướng nhanh</h3>
       <ul>
-        {items.map((item) => (
-          <li key={item}>{item}</li>
+        {SIDEBAR_ITEMS.map((item) => (
+          <li key={item}>
+            <button
+              type="button"
+              className={`menu-link ${item === DEFAULT_ACTIVE_ITEM ? "is-active" : ""}`.trim()}
+            >
+              {item}
+            </button>
+          </li>
         ))}
       </ul>
       <p className="menu-note">Role active: {roleCode}</p>
