@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useMainScreenPayload } from "../hooks/useMainScreenPayload";
 import { routeDispatchMap } from "../utils/routeDispatchMap";
@@ -10,9 +10,11 @@ import { WorkflowTimelinePanel } from "./WorkflowTimelinePanel";
 interface MainScreenPageProps {
   sessionToken?: string;
   onRequireRelogin: (reason: string) => void;
+  onLogout: () => void;
 }
 
-export function MainScreenPage({ sessionToken, onRequireRelogin }: MainScreenPageProps) {
+export function MainScreenPage({ sessionToken, onRequireRelogin, onLogout }: MainScreenPageProps) {
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const {
     payload,
     loading,
@@ -61,40 +63,60 @@ export function MainScreenPage({ sessionToken, onRequireRelogin }: MainScreenPag
           refresh().catch(() => undefined);
         }}
         onLogoutForContextChange={() => {
-          onRequireRelogin("Doi context yeu cau dang xuat va dang nhap lai.");
+          onLogout();
         }}
       />
 
-      <section className="main-screen-kpi">
-        <div>Tổng bước: {summaries.length}</div>
-        <div>Quá hạn: {totalOverdue}</div>
-        <div>Hàng chờ hiện tại: {queue.length}</div>
-      </section>
+      <div className="main-screen-kpi-row">
+        <button
+          type="button"
+          className={`main-screen-burger ${isNavOpen ? "is-open" : ""}`.trim()}
+          aria-label="Mở menu điều hướng"
+          aria-expanded={isNavOpen}
+          onClick={() => setIsNavOpen((prev) => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
 
-      <div className="main-screen-content">
-        <RoleAwareMenu roleCode={context.roleCode} />
+        <section className="main-screen-kpi">
+          <div>Tổng bước: {summaries.length}</div>
+          <div>Quá hạn: {totalOverdue}</div>
+          <div>Hàng chờ hiện tại: {queue.length}</div>
+        </section>
+      </div>
 
-        <MainQueueBoard
-          queue={queue}
-          selectedItemId={selectedItem?.itemId}
-          staleSelectionNotice={staleSelectionNotice}
-          onSelectItem={setSelectedItem}
-          onRunAction={(item, actionKey) => {
-            evaluateAction(item.itemId, actionKey)
-              .then((decision) => {
-                if (!decision.allowed) {
-                  window.alert(decision.reason || "Action bi tu choi");
-                  return;
-                }
+      <div className={`main-screen-body ${isNavOpen ? "is-nav-open" : ""}`.trim()}>
+        <aside className="main-screen-drawer">
+          <RoleAwareMenu roleCode={context.roleCode} />
+        </aside>
 
-                const route = routeDispatchMap(actionKey, item.routeTarget);
-                window.alert(`Chuyen toi man hinh: ${route}`);
-              })
-              .catch(() => window.alert("Khong the xac thuc hanh dong"));
-          }}
-        />
+        <div className="main-screen-workspace">
+          <div className="main-screen-content">
+            <MainQueueBoard
+              queue={queue}
+              selectedItemId={selectedItem?.itemId}
+              staleSelectionNotice={staleSelectionNotice}
+              onSelectItem={setSelectedItem}
+              onRunAction={(item, actionKey) => {
+                evaluateAction(item.itemId, actionKey)
+                  .then((decision) => {
+                    if (!decision.allowed) {
+                      window.alert(decision.reason || "Action bi tu choi");
+                      return;
+                    }
 
-        <WorkflowTimelinePanel selectedItem={selectedItem} timeline={selectedTimeline} />
+                    const route = routeDispatchMap(actionKey, item.routeTarget);
+                    window.alert(`Chuyen toi man hinh: ${route}`);
+                  })
+                  .catch(() => window.alert("Khong the xac thuc hanh dong"));
+              }}
+            />
+
+            <WorkflowTimelinePanel selectedItem={selectedItem} timeline={selectedTimeline} />
+          </div>
+        </div>
       </div>
 
       {errorMessage ? <p className="main-screen-error">{errorMessage}</p> : null}
