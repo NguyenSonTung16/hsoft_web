@@ -1,0 +1,13 @@
+.patient-info-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 18px 22px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 1.8;
+  border: 1px solid #e5e7eb;
+}
+.patient-info-card b {
+  color: #2563eb;
+}

@@ -19,6 +19,15 @@ interface SessionQueueRow {
   EXPIRES_AT: Date | string;
 }
 
+interface PatientQueueRow {
+  PATIENT_ID: string;
+  MA_BN: string;
+  HO_TEN: string;
+  LOAI_BENH_NHAN: string;
+  DOI_TUONG: string;
+  CREATED_AT: Date | string;
+}
+
 const WORKFLOW_STEPS: WorkflowStepCode[] = [
   "registration",
   "ordering",
@@ -114,42 +123,44 @@ export class MainScreenRepository {
 
     try {
       connection = await getConnection();
-      const result = await connection.execute<SessionQueueRow>(
+      const result = await connection.execute<PatientQueueRow>(
         `
-          SELECT ID, USER_ID, STATUS, ISSUED_AT, EXPIRES_AT
-          FROM LIS_SESSION
-          WHERE USER_ID = :userId
-            AND FACILITY_ID = :facilityId
-            AND LAB_AREA_ID = :labAreaId
-            AND STATUS = 'success'
-          ORDER BY ISSUED_AT DESC
+          SELECT
+            B.ID AS PATIENT_ID,
+            B.MA_BN AS MA_BN,
+            B.HO_TEN AS HO_TEN,
+            H.LOAI_BENH_NHAN AS LOAI_BENH_NHAN,
+            H.DOI_TUONG AS DOI_TUONG,
+            H.CREATED_AT AS CREATED_AT
+          FROM BTDBN B
+          JOIN HANHCHANH H ON H.PATIENT_ID = B.ID
+          ORDER BY H.CREATED_AT DESC
         `,
-        {
-          userId: input.userId,
-          facilityId: input.facilityId,
-          labAreaId: input.labAreaId,
-        },
+        {},
         { outFormat: oracledb.OUT_FORMAT_OBJECT }
       );
 
-      const rows = (result.rows as SessionQueueRow[] | undefined) ?? [];
+      const rows = (result.rows as PatientQueueRow[] | undefined) ?? [];
 
       return rows.map((row) => {
-        const slaState = deriveSlaState(row.EXPIRES_AT);
+        const enteredStepAt = toIso(row.CREATED_AT);
+        const enteredAtMs = new Date(enteredStepAt).getTime();
+        const slaDueAt = new Date(enteredAtMs + 2 * 60 * 60 * 1000).toISOString();
+        const slaState = deriveSlaState(slaDueAt);
 
         return {
-          itemId: row.ID,
-          orderId: row.ID,
-          specimenId: row.ID,
-          patientId: row.USER_ID,
-          patientDisplayName: `User ${row.USER_ID.slice(0, 6)}`,
-          currentStep: "entry",
-          nextAllowedActions: ["open_work_item", "open_entry_screen"],
-          enteredStepAt: toIso(row.ISSUED_AT),
-          slaDueAt: toIso(row.EXPIRES_AT),
+          itemId: row.PATIENT_ID,
+          orderId: row.MA_BN,
+          specimenId: undefined,
+          patientId: row.MA_BN,
+          patientDisplayName: row.HO_TEN,
+          currentStep: "registration",
+          nextAllowedActions: ["open_ordering"],
+          enteredStepAt,
+          slaDueAt,
           slaState,
           priorityLevel: slaState === "overdue" ? "critical" : slaState === "warning" ? "high" : "normal",
-          routeTarget: input.roleCode === "lab_doctor" ? "/approval" : "/entry",
+          routeTarget: "/test-order",
         } satisfies WorkflowQueueItem;
       });
     } finally {

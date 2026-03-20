@@ -1,0 +1,109 @@
+.patient-intake-grid-summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin-top: 0.2rem;
+}
+
+.patient-intake-tests-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin-top: 0.2rem;
+}
+
+.patient-intake-tests-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin-top: 0.55rem;
+}
+
+.patient-intake-tests-search {
+	width: min(360px, 100%);
+}
+
+.patient-intake-tests-actions {
+	display: flex;
+	gap: 0.6rem;
+	flex-wrap: wrap;
+}
+
+.barcode-input {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	font-weight: 600;
+}
+
+.barcode-input input {
+	width: 140px;
+	padding: 0.45rem 0.6rem;
+	border: 1px solid #c6d5e6;
+	border-radius: 8px;
+	font: inherit;
+	color: #11263f;
+	background: #f9fbff;
+	font-size: 0.95rem;
+	line-height: 1;
+}
+
+.patient-intake-table-wrap {
+	margin-top: 0.55rem;
+	overflow-x: auto;
+	/* show at most ~3 rows; enable vertical scrolling when there are more */
+	overflow-y: auto;
+	max-height: 150px;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* keep the table header fixed while the list (tbody) scrolls inside the wrapper */
+.patient-intake-table-wrap {
+	position: relative;
+}
+
+.patient-intake-table thead th {
+	position: sticky;
+	top: 0;
+	z-index: 3;
+	background: #f5f8ff; /* same as header background */
+}
+
+.patient-intake-table {
+	width: 100%;
+	border-collapse: collapse;
+	background: #fff;
+	border: 1px solid #d9e2ef;
+	border-radius: 12px;
+}
+
+.patient-intake-table th,
+.patient-intake-table td {
+	padding: 0.5rem 0.7rem;
+	border-bottom: 1px solid #eef3fb;
+	text-align: left;
+	color: #153758;
+	font-size: 0.95rem;
+}
+
+.patient-intake-table th {
+	background: #f5f8ff;
+	font-weight: 800;
+}
+
+.empty-row {
+	color: #49617f;
+	font-style: italic;
+}
+
+.row-selected {
+	background: rgba(21, 144, 95, 0.08);
+}
+
+.patient-intake-table tr[role="button"] {
+	cursor: pointer;
+}
+

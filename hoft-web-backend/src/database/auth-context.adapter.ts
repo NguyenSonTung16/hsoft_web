@@ -7,6 +7,8 @@ interface SessionContextRow {
   USER_ID: string;
   FACILITY_ID: string;
   LAB_AREA_ID: string;
+  FACILITY_NAME: string;
+  LAB_AREA_NAME: string;
 }
 
 interface RoleCodeRow {
@@ -21,6 +23,8 @@ export interface GraphQLAuthContext {
   facilityScope?: {
     facilityId: string;
     labAreaId: string;
+    facilityName?: string;
+    labAreaName?: string;
   };
 }
 
@@ -52,7 +56,13 @@ export class OracleAuthContextAdapter implements AuthContextDataAccess {
 
       const sessionResult = await connection.execute<SessionContextRow>(
         `
-          SELECT S.ID, S.USER_ID, S.FACILITY_ID, S.LAB_AREA_ID
+          SELECT
+            S.ID,
+            S.USER_ID,
+            S.FACILITY_ID,
+            S.LAB_AREA_ID,
+            F.NAME AS FACILITY_NAME,
+            A.NAME AS LAB_AREA_NAME
           FROM LIS_SESSION S
           JOIN LIS_FACILITY F ON F.ID = S.FACILITY_ID AND F.IS_ACTIVE = 'Y'
           JOIN LIS_LAB_AREA A ON A.ID = S.LAB_AREA_ID AND A.IS_ACTIVE = 'Y'
@@ -99,6 +109,8 @@ export class OracleAuthContextAdapter implements AuthContextDataAccess {
         facilityScope: {
           facilityId: sessionRow.FACILITY_ID,
           labAreaId: sessionRow.LAB_AREA_ID,
+          facilityName: sessionRow.FACILITY_NAME,
+          labAreaName: sessionRow.LAB_AREA_NAME,
         },
         isContextValid: true,
       };

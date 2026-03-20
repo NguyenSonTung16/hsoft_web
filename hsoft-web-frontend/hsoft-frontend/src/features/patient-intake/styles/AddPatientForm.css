@@ -1,0 +1,319 @@
+.patient-intake-page {
+	display:flex;
+	flex-direction:column;
+}
+
+.patient-intake-header h1 {
+	margin: 0;
+	font-size: 1.6rem;
+	color: #12345b;
+}
+
+.patient-intake-header p {
+
+	color: #49617f;
+}
+
+.patient-intake-back {
+	width: fit-content;
+	border: 1px solid #a4bdd9;
+	border-radius: 9px;
+	background: #4888dc;
+	color: white;
+	padding: 0.48rem 0.9rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.patient-intake-form {
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+
+.patient-intake-grid {
+	display: grid;
+	gap: 0.15rem;
+	grid-template-columns: 1.25fr 0.85fr;
+}
+
+/* Left / right column wrappers for stacked panels */
+.patient-intake-left-column,
+.patient-intake-right-column {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+.patient-intake-form label {
+	display: flex;
+	flex-direction: row;
+	gap: 0.35rem;
+	color: #153758;
+	font-weight: 600;
+	font-size: 0.92rem;
+}
+
+.patient-intake-form input,
+.patient-intake-form select,
+.patient-intake-form textarea {
+	padding: 0.45rem 0.6rem;
+	border: 1px solid #c6d5e6;
+	border-radius: 8px;
+	font: inherit;
+	color: #11263f;
+	background: #f9fbff;
+	font-size: 0.95rem;
+	line-height: 1;
+}
+
+.patient-intake-form textarea {
+	resize: vertical;
+}
+
+.patient-intake-address {
+	grid-column: span 2;
+}
+
+/* When only the 'name' input is used (no separate code field) */
+.patient-intake-name-only{
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+.patient-intake-name-only input{
+	padding: 0.45rem 0.6rem;
+	border: 1px solid #c6d5e6;
+	border-radius: 8px;
+	font: inherit;
+	color: #11263f;
+	background: #f9fbff;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 0.95rem;
+	line-height: 1;
+}
+
+/* shorter visual length for 'Tên' inputs while keeping grid proportions */
+.name-short{
+		max-width: 70%;
+}
+
+@media (max-width:860px){
+	.name-short{max-width:100%}
+}
+
+/* small extra gap for the house-number field to avoid input touching the label */
+.house-number .patient-intake-name-only{margin-left:15px}
+
+/* Flexible grid rows for address */
+.patient-intake-address-rows{display:flex;flex-direction:column;gap:0.6rem}
+.address-row{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;align-items:start}
+.address-row .patient-intake-inline-field,.address-row .patient-intake-workplace{margin:0}
+.address-row .patient-intake-inline-field > span{min-width:0}
+
+/* column ratio helpers (sum always equals full width) */
+.cols-30-70{grid-template-columns:0.30fr 0.70fr}
+.cols-35-65{grid-template-columns:0.35fr 0.65fr}
+.cols-40-60{grid-template-columns:0.40fr 0.60fr}
+.cols-50-50{grid-template-columns:1fr 1fr}
+
+@media (max-width: 860px){
+	.address-row{grid-template-columns:1fr}
+}
+
+.field-error {
+	color: #b51d27;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.patient-intake-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.patient-intake-two-col {
+	display: grid;
+	grid-template-columns: 1.35fr 0.95fr;
+	gap: 1rem;
+	align-items: start;
+}
+
+.patient-intake-action-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+
+.patient-intake-action-block {
+	border: 1px solid #d9e2ef;
+	border-radius: 12px;
+	padding: 0.75rem;
+	background: #fff;
+}
+
+.patient-intake-action-title {
+	font-weight: 900;
+	color: #12345b;
+	margin-bottom: 0.5rem;
+}
+
+.patient-intake-btn-muted {
+	background: #eef4fc !important;
+	color: #0f3c6e !important;
+}
+
+.patient-intake-actions button {
+	width: fit-content;
+	border: none;
+	border-radius: 10px;
+	background: linear-gradient(135deg, #0f5da8, #0a7ec2);
+	color: #fff;
+	font-weight: 700;
+	padding: 0.68rem 1.2rem;
+	cursor: pointer;
+}
+
+.patient-intake-save-order {
+	background: linear-gradient(135deg, #0f7d52, #15905f);
+}
+
+.patient-intake-actions button:disabled {
+	opacity: 0.75;
+	cursor: not-allowed;
+}
+
+.submit-message {
+	margin: 0;
+	color: #125c2b;
+	font-weight: 600;
+}
+
+.submit-message.error {
+	color: #b51d27;
+}
+
+@media (max-width: 860px) {
+	.patient-intake-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.patient-intake-two-col {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Dense 3-part layout (Top/Middle/Bottom) */
+.patient-intake-form-layout {
+	margin-top: 1rem;
+}
+
+.patient-intake-layout {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	min-height: 72vh;
+}
+
+.patient-intake-top {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.25rem;
+	align-items: start;
+}
+
+.patient-intake-middle {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.25rem;
+	align-items: start;
+	min-height: 360px;
+	flex: 1;
+}
+
+.patient-intake-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	min-height: 0;
+	background-color: #fff;
+	border: 1px solid #d9e2ef;
+	border-radius: 10px;
+	padding: 0.6rem; /* reduced padding to make panels denser */
+}
+
+.patient-intake-top-row {
+	display: grid;
+	gap: 0.85rem;
+}
+
+.patient-intake-top-row-2 {
+	grid-template-columns: 0.75fr 2fr;
+}
+
+.patient-intake-top-row-3 {
+	grid-template-columns: 1fr 1fr 0.9fr;
+}
+
+.patient-intake-top-row-1 {
+	grid-template-columns: 1fr;
+}
+
+.patient-intake-bottom {
+	margin-top: auto;
+}
+
+.patient-intake-action-bar {
+	flex-direction: row !important;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	align-items: center;
+}
+
+.patient-intake-action-divider {
+	width: 1px;
+	height: 32px;
+	background: #d9e2ef;
+	margin: 0 0.1rem;
+}
+
+.patient-intake-history-wrap {
+	min-height: 0;
+}
+
+.patient-intake-package-wrap {
+	display: flex;
+	flex-direction: column;
+	gap: 0.55rem;
+	min-height: 0;
+}
+
+.patient-intake-package-title {
+	font-weight: 600;
+	color: #12345b;
+	margin-top: 0.1rem;
+	font-size: 1rem;
+}
+
+.patient-intake-empty-listbox {
+	flex: 1;
+	min-height: 160px;
+	border: 1px solid #d9e2ef;
+	border-radius: 12px;
+	background: #fff;
+}
+
+@media (max-width: 860px) {
+	.patient-intake-top {
+		grid-template-columns: 1fr;
+	}
+	.patient-intake-middle {
+		grid-template-columns: 1fr;
+	}
+	.patient-intake-action-divider {
+		display: none;
+	}
+}

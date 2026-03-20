@@ -1,4 +1,5 @@
 import type { FacilityOption, LabAreaOption, LoginRequestDraft } from '../types/login.types'
+import { getGraphQLEndpoint } from '../../../shared/graphqlEndpoint'
 
 export interface LoginResponseContract {
   success: boolean
@@ -30,7 +31,7 @@ async function requestGraphQL<TData>(
   query: string,
   variables?: Record<string, unknown>,
 ): Promise<TData> {
-  const response = await fetch('/graphql', {
+  const response = await fetch(getGraphQLEndpoint(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

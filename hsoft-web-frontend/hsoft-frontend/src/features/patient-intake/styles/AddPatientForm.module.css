@@ -1,0 +1,66 @@
+:root{
+  --primary:#0b6cf6;
+  --muted:#f3f6fb;
+  --border:#e2e8f0;
+}
+.page{
+  padding:12px;
+  font-family: Inter, Arial, sans-serif;
+  color:#0f172a;
+  font-size:20px;
+}
+
+/* Horizontal margins: small on narrow screens, larger on wide screens */
+.page{
+  margin: 0 12px;
+}
+
+@media (min-width: 1200px) {
+  .page{
+    margin-inline: 48px;
+  }
+}
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.header h1{margin:0;font-size:18px;color:var(--primary)}
+.back{background:transparent;border:1px solid var(--border);padding:6px 10px;border-radius:4px}
+.form{display:flex;flex-direction:column;gap:12px}
+.gridTwoCol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.section{background:white;border:1px solid var(--border);padding:12px;border-radius:6px}
+.sectionTitle{margin:0 0 8px 0;color:var(--primary);font-size:13px}
+.row{display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+.label{font-size:12px;color:#0f172a}
+.input{padding:6px 8px;border:1px solid var(--border);border-radius:5px;width:100%;box-sizing:border-box}
+.rowInlineGroup{display:flex;gap:8px;margin-bottom:8px}
+.rowSmall{flex:1;display:flex;flex-direction:column}
+.rowSmall .label{margin-bottom:4px}
+.rowAddress .label{align-self:start}
+.addressGrid{display:grid;grid-template-columns:1fr;gap:6px}
+.smallGrid{display:flex;gap:6px}
+.code{width:18%;padding:6px;border:1px solid var(--border);border-radius:5px}
+.name{flex:1;padding:6px;border:1px solid var(--border);border-radius:5px}
+.full{width:100%}
+.sttBox{position:absolute;right:30px;top:100px;text-align:center}
+.sttLabel{color:#fff;background:red;padding:3px 6px;border-radius:4px;font-weight:700}
+.sttValue{font-size:16px;color:red;margin-top:4px}
+.codeNameGroup{display:flex;gap:6px;align-items:center}
+.sectionFull{display:flex;flex-direction:column;gap:8px}
+.testsHeader{display:flex;justify-content:space-between;align-items:center;padding:6px}
+.barcodeInput{width:56px;padding:5px;border:1px solid var(--border);border-radius:5px}
+.testsArea{display:flex;gap:8px}
+.testsTable{flex:1;border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.tableHeader{display:grid;grid-template-columns:60px 100px 1fr;background:#e8f2ff;padding:8px;color:#0b63d6;font-weight:600}
+.tableBody{max-height:120px;overflow:auto}
+.emptyRow{padding:12px;color:#64748b}
+.testControls{width:220px;display:flex;flex-direction:column;gap:8px}
+.controlButtons{display:flex;gap:6px}
+.sampleHistory{margin-top:6px}
+.historyBox{border:1px dashed var(--border);padding:10px;border-radius:6px;background:#fbfdff}
+.toolbar{position:sticky;bottom:0;display:flex;justify-content:space-between;gap:8px;padding:8px 0;background:white;margin-top:10px}
+.toolbarGroup{display:flex;gap:6px}
+.primary{background:var(--primary);color:white;border:none;padding:6px 10px;border-radius:6px}
+.button{padding:6px 10px;border-radius:6px}

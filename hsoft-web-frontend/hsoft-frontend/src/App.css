@@ -11,7 +11,7 @@
 
 .lis-page-main {
   align-items: flex-start;
-  padding-top: 20px;
+  padding-top: 0;
   padding-bottom: 20px;
   padding-inline: clamp(16px, 2.5vw, 28px);
 }

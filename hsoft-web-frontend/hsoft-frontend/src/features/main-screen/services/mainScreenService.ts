@@ -1,6 +1,10 @@
+import { getGraphQLEndpoint } from "../../../shared/graphqlEndpoint";
+
 export interface MainScreenContextDto {
   facilityId: string;
   labAreaId: string;
+  facilityName?: string;
+  labAreaName?: string;
   workDate: string;
   roleCode: string;
   isContextValid: boolean;
@@ -68,7 +72,7 @@ async function requestGraphQL<TData>(
   query: string,
   variables?: Record<string, unknown>
 ): Promise<TData> {
-  const response = await fetch("/graphql", {
+  const response = await fetch(getGraphQLEndpoint(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -132,6 +136,8 @@ class GraphQLMainScreenService implements MainScreenService {
             context {
               facilityId
               labAreaId
+              facilityName
+              labAreaName
               workDate
               roleCode
               isContextValid

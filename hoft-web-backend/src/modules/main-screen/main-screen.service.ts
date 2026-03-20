@@ -47,6 +47,8 @@ interface ValidMainScreenContext {
   facilityScope: {
     facilityId: string;
     labAreaId: string;
+    facilityName?: string;
+    labAreaName?: string;
   };
 }
 
@@ -148,6 +150,8 @@ export function createMainScreenService(deps: ServiceDeps = defaultDeps) {
           roleCode: resolved.roleCode,
           facilityId: resolved.facilityScope.facilityId,
           labAreaId: resolved.facilityScope.labAreaId,
+          facilityName: resolved.facilityScope.facilityName,
+          labAreaName: resolved.facilityScope.labAreaName,
           workDate: new Date().toISOString().slice(0, 10),
           isContextValid: true,
         },

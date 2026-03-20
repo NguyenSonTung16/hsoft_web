@@ -7,8 +7,40 @@ import { getConnection } from './database/oracle';
 dotenv.config();
 
 const app = express();
-// Chỉ cho phép frontend truy cập
-app.use(cors({ origin: 'http://localhost:5173' }));
+const allowedOrigins = new Set([
+  'http://localhost:5173',
+  'http://localhost',
+  'https://localhost',
+  'capacitor://localhost',
+  'ionic://localhost',
+  'http://10.0.2.2:5173',
+  'http://10.0.2.2',
+  'https://10.0.2.2',
+]);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      // Accept localhost origins used by WebView and local development.
+      if (/^(https?:\/\/|capacitor:\/\/|ionic:\/\/)localhost(?::\d+)?$/i.test(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      if (/^https?:\/\/10\.0\.2\.2(?::\d+)?$/i.test(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+  })
+);
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());

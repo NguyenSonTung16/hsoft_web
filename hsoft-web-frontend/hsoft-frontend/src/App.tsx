@@ -2,7 +2,10 @@ import './App.css'
 import { useLoginForm } from './features/login/hooks/useLoginForm'
 import { LoginForm } from './features/login/components/LoginForm'
 import { MainScreenPage } from './features/main-screen'
+import { AddPatientForm } from './features/patient-intake'
+import { TestOrderPage } from './features/test-order'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { SampleCollectionPage } from './features/sample-collection';
 
 function App() {
   const loginProps = useLoginForm()
@@ -41,6 +44,42 @@ function App() {
                 onRequireRelogin={(reason) => loginProps.resetSessionForRelogin(reason)}
                 onLogout={() => loginProps.resetSessionForLogout()}
               />
+            </div>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/patient-intake"
+        element={
+          isAuthenticated ? (
+            <div className="lis-page lis-page-main">
+              <AddPatientForm sessionToken={session.sessionToken} />
+            </div>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/test-order"
+        element={
+          isAuthenticated ? (
+            <div className="lis-page lis-page-main">
+              <TestOrderPage />
+            </div>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/sample-collection"
+        element={
+          isAuthenticated ? (
+            <div className="lis-page lis-page-main">
+              <SampleCollectionPage />
             </div>
           ) : (
             <Navigate to="/login" replace />

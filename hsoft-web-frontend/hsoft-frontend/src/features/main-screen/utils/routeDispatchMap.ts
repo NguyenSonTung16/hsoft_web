@@ -2,7 +2,7 @@ const DEFAULT_ROUTE = "/main-screen";
 
 const ACTION_ROUTE: Record<string, string> = {
   open_registration: "/registration",
-  open_ordering: "/ordering",
+  open_ordering: "/test-order",
   open_collection: "/collection",
   open_receipt: "/receipt",
   open_analysis: "/analysis",

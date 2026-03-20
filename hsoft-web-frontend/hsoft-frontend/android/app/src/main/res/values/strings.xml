@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">hsoftApp</string>
+    <string name="title_activity_main">hsoftApp</string>
+    <string name="package_name">com.hsoft.app</string>
+    <string name="custom_url_scheme">com.hsoft.app</string>
+</resources>

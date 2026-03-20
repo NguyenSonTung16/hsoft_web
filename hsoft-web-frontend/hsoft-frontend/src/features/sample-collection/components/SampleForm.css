@@ -1,0 +1,85 @@
+.sample-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #2563eb;
+}
+.sample-form input,
+.sample-form select,
+.sample-form textarea {
+  width: 100%;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  background: #f8fafc;
+  color: #222;
+  transition: border 0.2s;
+}
+.sample-form select option {
+  color: #222;
+  background: #fff;
+}
+.sample-form input:focus,
+.sample-form select:focus,
+.sample-form textarea:focus {
+  border: 1.5px solid #2563eb;
+  outline: none;
+}
+.sample-form textarea {
+  min-height: 56px;
+  resize: vertical;
+}
+
+.sample-form-grid {
+  display: grid;
+  gap: 0rem 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.sample-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #153758;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.sample-form-grid input,
+.sample-form-grid select {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #c6d5e6;
+  border-radius: 10px;
+  font: inherit;
+  color: #11263f;
+  background: #f9fbff;
+}
+
+.sample-form-grid input[type="date"] {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.sample-form-notes {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  color: #153758;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.sample-form-notes textarea {
+  margin-top: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #c6d5e6;
+  border-radius: 10px;
+  font: inherit;
+  color: #11263f;
+  background: #f9fbff;
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+}

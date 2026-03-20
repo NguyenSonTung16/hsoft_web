@@ -12,4 +12,8 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: 'www',   // Capacitor sẽ lấy folder này để tạo app mobile
+    emptyOutDir: true, // Xóa folder www cũ trước khi build
+  },
 })

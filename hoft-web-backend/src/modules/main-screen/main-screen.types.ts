@@ -15,6 +15,8 @@ export interface MainScreenContext {
   roleCode: string;
   facilityId: string;
   labAreaId: string;
+  facilityName?: string;
+  labAreaName?: string;
   workDate: string;
   isContextValid: boolean;
   invalidReason?: string;

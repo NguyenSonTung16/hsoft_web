@@ -1,0 +1,18 @@
+.order-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px #0001;
+}
+.order-list-table th, .order-list-table td {
+  border: 1px solid #e5e7eb;
+  padding: 7px 12px;
+}
+.order-list-table th {
+  background: #f1f5f9;
+  color: #2563eb;
+  font-weight: 600;
+}

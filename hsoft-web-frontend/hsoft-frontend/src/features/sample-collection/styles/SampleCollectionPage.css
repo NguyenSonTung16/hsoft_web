@@ -1,0 +1,121 @@
+.back-circle-btn {
+  width: 80px;
+  height: 80px;
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s;
+}
+.back-circle-btn:focus {
+  outline: 2px solid #2563eb;
+}
+.back-circle-btn svg {
+  display: block;
+}
+
+.sample-collection-page {
+  max-width: 1100px;
+  margin: 24px auto;
+  background: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px #0002;
+  padding: 32px 32px 24px 32px;
+}
+
+.search-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.search-section input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d7de;
+  font-size: 16px;
+  background: #fff;
+  color: #222;
+  transition: border 0.2s;
+}
+.search-section input:focus {
+  border: 1.5px solid #2563eb;
+  outline: none;
+}
+.search-section button {
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.search-section button:hover {
+  background: #1d4ed8;
+}
+
+.info-history-row {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 20px;
+}
+.info-col {
+  flex: 1 1 340px;
+}
+.history-col {
+  flex: 2 1 500px;
+}
+
+.sample-form-row {
+  margin-bottom: 20px;
+}
+.action-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.action-row button:first-child, .action-row button:nth-child(2) {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 22px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.action-row button:first-child:hover, .action-row button:nth-child(2):hover {
+  background: #1d4ed8;
+}
+.sample-collection-page h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 18px;
+}
+.sample-collection-page button {
+  font-size: 15px;
+}
+
+.sample-section-title {
+  color: #2563eb;
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin: 1.2rem 0 0.7rem 0;
+  letter-spacing: 0.01em;
+}
+@media (max-width: 600px) {
+  .sample-section-title {
+    font-size: 1.02rem;
+    margin-top: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+}

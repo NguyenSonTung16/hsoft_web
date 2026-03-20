@@ -21,6 +21,18 @@ function formatDate(value?: string): string {
   return date.toLocaleString();
 }
 
+function resolvePrimaryAction(item: WorkflowQueueItemDto): string {
+  return item.nextAllowedActions[0] || "open_work_item";
+}
+
+function resolveActionLabel(actionKey: string): string {
+  if (actionKey === "open_ordering") {
+    return "Chỉ định xét nghiệm";
+  }
+
+  return "Mở";
+}
+
 export function MainQueueBoard({
   queue,
   selectedItemId,
@@ -53,6 +65,8 @@ export function MainQueueBoard({
           <tbody>
             {queue.map((item) => {
               const selected = item.itemId === selectedItemId;
+              const primaryAction = resolvePrimaryAction(item);
+              const primaryActionLabel = resolveActionLabel(primaryAction);
               return (
                 <tr
                   key={item.itemId}
@@ -71,10 +85,10 @@ export function MainQueueBoard({
                       type="button"
                       onClick={(event) => {
                         event.stopPropagation();
-                        onRunAction(item, item.nextAllowedActions[0] || "open_work_item");
+                        onRunAction(item, primaryAction);
                       }}
                     >
-                      Mở
+                      {primaryActionLabel}
                     </button>
                   </td>
                 </tr>

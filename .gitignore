@@ -39,3 +39,10 @@ Thumbs.db
 *.db-journal
 
 .gitignore
+
+# Ignore agent/session memory markdown files
+/memories/
+/memories/*
+**/memories/
+**/memories/*
+.step-1-tiep-nhan-benh-nhan

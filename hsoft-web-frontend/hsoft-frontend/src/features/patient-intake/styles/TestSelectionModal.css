@@ -1,0 +1,163 @@
+.patient-intake-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(10, 25, 47, 0.55);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 18px;
+	z-index: 1000;
+}
+
+.patient-intake-modal {
+	width: min(1100px, 100%);
+	max-height: min(86vh, 900px);
+	background: #fff;
+	border-radius: 16px;
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.patient-intake-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 16px;
+	border-bottom: 1px solid #e8eff8;
+	background: #f5f8ff;
+}
+
+.patient-intake-modal-close {
+	border: none;
+	background: transparent;
+	font-size: 26px;
+	cursor: pointer;
+	color: #153758;
+	padding: 0 8px;
+}
+
+.patient-intake-modal-body {
+	padding: 14px 16px;
+	display: grid;
+	grid-template-columns: 1.35fr 0.95fr;
+	gap: 14px;
+	overflow: auto;
+}
+
+.patient-intake-modal-left {
+	min-width: 0;
+}
+
+.patient-intake-modal-group {
+	border: 1px solid #d9e2ef;
+	border-radius: 12px;
+	margin-bottom: 12px;
+	overflow: hidden;
+}
+
+.patient-intake-modal-group-title {
+	padding: 10px 12px;
+	background: #eef4fc;
+	font-weight: 900;
+	color: #0f3c6e;
+}
+
+.patient-intake-modal-group-items {
+	padding: 10px 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.patient-intake-modal-checkbox {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: #153758;
+	font-weight: 700;
+	font-size: 0.92rem;
+}
+
+.patient-intake-modal-checkbox input {
+	transform: translateY(1px);
+}
+
+.patient-intake-modal-right {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.patient-intake-modal-ticked-summary {
+	font-weight: 900;
+	color: #153758;
+}
+
+.patient-intake-modal-ticked-table-wrap {
+	border: 1px solid #d9e2ef;
+	border-radius: 12px;
+	overflow: auto;
+}
+
+.patient-intake-modal-ticked-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.patient-intake-modal-ticked-table th,
+.patient-intake-modal-ticked-table td {
+	padding: 10px 12px;
+	border-bottom: 1px solid #eef3fb;
+	text-align: left;
+	color: #153758;
+	font-size: 0.92rem;
+}
+
+.patient-intake-modal-ticked-table th {
+	background: #f5f8ff;
+	font-weight: 900;
+}
+
+.empty-row {
+	color: #49617f;
+	font-style: italic;
+}
+
+.patient-intake-modal-footer {
+	padding: 14px 16px;
+	border-top: 1px solid #e8eff8;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	background: #fff;
+}
+
+.patient-intake-btn-secondary,
+.patient-intake-btn-primary {
+	border-radius: 12px;
+	padding: 0.75rem 1.05rem;
+	font-weight: 900;
+	cursor: pointer;
+	border: none;
+}
+
+.patient-intake-btn-secondary {
+	background: #eef4fc;
+	color: #0f3c6e;
+}
+
+.patient-intake-btn-primary {
+	background: linear-gradient(135deg, #0f5da8, #0a7ec2);
+	color: #fff;
+}
+
+@media (max-width: 980px) {
+	.patient-intake-modal-body {
+		grid-template-columns: 1fr;
+	}
+}
+

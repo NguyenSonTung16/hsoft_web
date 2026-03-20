@@ -1,0 +1,18 @@
+.sample-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px #0001;
+}
+.sample-history-table th, .sample-history-table td {
+  border: 1px solid #e5e7eb;
+  padding: 7px 12px;
+}
+.sample-history-table th {
+  background: #f1f5f9;
+  color: #2563eb;
+  font-weight: 600;
+}

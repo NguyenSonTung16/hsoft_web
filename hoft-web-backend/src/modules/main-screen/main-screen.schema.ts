@@ -39,6 +39,8 @@ export const mainScreenSchema = `#graphql
   type MainScreenContext {
     facilityId: ID!
     labAreaId: ID!
+    facilityName: String
+    labAreaName: String
     workDate: String!
     roleCode: String!
     isContextValid: Boolean!
